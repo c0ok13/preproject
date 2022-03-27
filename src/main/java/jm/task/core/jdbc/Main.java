@@ -1,5 +1,6 @@
 package jm.task.core.jdbc;
 
+import jm.task.core.jdbc.dao.UserDaoHibernateImpl;
 import jm.task.core.jdbc.dao.UserDaoJDBCImpl;
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.service.UserServiceImpl;
@@ -17,23 +18,21 @@ public class Main {
     static final String PASS = "root";
 
     public static void main(String[] args)
-    {try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-         Statement stmt = conn.createStatement()
-    ) {
-        UserDaoJDBCImpl userDaoJDBC = new UserDaoJDBCImpl();
-        userDaoJDBC.createUsersTable();
-        System.out.println("Created table in given database...");
+    {
+        //UserDaoJDBCImpl userDaoJDBC = new UserDaoJDBCImpl();
+        UserDaoHibernateImpl userDaoHibernate = new UserDaoHibernateImpl();
+        userDaoHibernate.createUsersTable();
+//        System.out.println("Created table in given database...");
+//
+        userDaoHibernate.saveUser("Yaroslav", "Mimeev", (byte) 22);
+        userDaoHibernate.saveUser("Yaroslav", "Mimeev", (byte) 22);
+        userDaoHibernate.saveUser("Ivan", "Ivanov", (byte) 39);
+        userDaoHibernate.saveUser("Arthas", "Menethil", (byte) 24);
+        userDaoHibernate.saveUser("Vladimir", "Putin", (byte) 69);
 
-        userDaoJDBC.saveUser("Yaroslav", "Mimeev", (byte) 22);
-        userDaoJDBC.saveUser("Ivan", "Ivanov", (byte) 39);
-        userDaoJDBC.saveUser("Arthas", "Menethil", (byte) 24);
-        userDaoJDBC.saveUser("Vladimir", "Putin", (byte) 69);
 
-        System.out.println(userDaoJDBC.getAllUsers());
-        userDaoJDBC.cleanUsersTable();
-        userDaoJDBC.dropUsersTable();
-    } catch (SQLException e) {
-        e.printStackTrace();
-    }
+        System.out.println(userDaoHibernate.getAllUsers());
+        userDaoHibernate.cleanUsersTable();
+        userDaoHibernate.dropUsersTable();
     }
 }

@@ -1,5 +1,6 @@
 package jm.task.core.jdbc.service;
 
+import jm.task.core.jdbc.dao.UserDaoHibernateImpl;
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
 
@@ -8,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserServiceImpl implements UserService {
+
+    UserDaoHibernateImpl userDaoHibernate = new UserDaoHibernateImpl();
 
     public void createUsersTable() {
         Connection connection = Util.getConnection();
@@ -29,75 +32,22 @@ public class UserServiceImpl implements UserService {
     }
 
     public void dropUsersTable() {
-        Connection connection = Util.getConnection();
-        try {
-            Statement stmt = connection.createStatement();
-            stmt.execute("DROP TABLE IF EXISTS USER");
-        }   catch (SQLException e) {
-            e.printStackTrace();
-        }
+        userDaoHibernate.dropUsersTable();
     }
 
     public void saveUser(String name, String lastName, byte age) {
-
-        Connection connection = Util.getConnection();
-
-        String insertStatement =
-                "INSERT INTO user (name, lastName, age) VALUES (?, ?, ?)";
-        try {
-            PreparedStatement insertUser = connection.prepareStatement(insertStatement);
-            insertUser.setString(1, name);
-            insertUser.setString(2, lastName);
-            insertUser.setByte(3, age);
-            insertUser.executeUpdate();
-            System.out.println(name + " added to databse");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        userDaoHibernate.saveUser(name, lastName, age);
     }
 
     public void removeUserById(long id) {
-        Connection connection = Util.getConnection();
-
-        String insertStatement =
-                "DELETE FROM user WHERE ID = ?";
-        try {
-            PreparedStatement deleteUser = connection.prepareStatement(insertStatement);
-            deleteUser.setLong(1, id);
-            deleteUser.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        userDaoHibernate.removeUserById(id);
     }
 
     public List<User> getAllUsers() {
-        List<User> users = new ArrayList<>();
-
-        try (Connection connection = Util.getConnection();
-             Statement statement = connection.createStatement();
-             ResultSet rst = statement.executeQuery("SELECT * FROM USER");
-        ){
-            while (rst.next()) {
-                User user = new User();
-                user.setId(rst.getLong(1));
-                user.setName(rst.getString(2));
-                user.setLastName(rst.getString(3));
-                user.setAge(rst.getByte(4));
-                users.add(user);
-            }
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
-        return users;
+        return userDaoHibernate.getAllUsers();
     }
 
     public void cleanUsersTable() {
-        Connection connection = Util.getConnection();
-        try {
-            Statement stmt = connection.createStatement();
-            stmt.execute("TRUNCATE TABLE USER");
-        }   catch (SQLException e) {
-            e.printStackTrace();
-        }
+        userDaoHibernate.cleanUsersTable();
     }
 }

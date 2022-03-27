@@ -5,7 +5,9 @@
       <configuration>
         <setting name="validation-enabled" value="true" />
         <setting name="provider-name" value="Hibernate" />
-        <datasource-mapping />
+        <datasource-mapping>
+          <factory-entry name="preproject" value="5a7360fb-c839-458b-8bb0-18d1c372dd13" />
+        </datasource-mapping>
         <naming-strategy-map />
       </configuration>
     </facet>
