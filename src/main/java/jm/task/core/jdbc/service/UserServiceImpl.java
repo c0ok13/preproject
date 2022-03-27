@@ -13,22 +13,7 @@ public class UserServiceImpl implements UserService {
     UserDaoHibernateImpl userDaoHibernate = new UserDaoHibernateImpl();
 
     public void createUsersTable() {
-        Connection connection = Util.getConnection();
-        Statement stmt = null;
-        try {
-            stmt = connection.createStatement();
-            stmt.executeUpdate("""
-                create table IF NOT EXISTS user
-                (id       int NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-                 name     varchar(255) null,
-                 lastName varchar(255) null,
-                 age      tinyint      null
-                 );""");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-
+        userDaoHibernate.createUsersTable();
     }
 
     public void dropUsersTable() {
