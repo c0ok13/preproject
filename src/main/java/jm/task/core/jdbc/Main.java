@@ -19,20 +19,17 @@ public class Main {
 
     public static void main(String[] args)
     {
-        //UserDaoJDBCImpl userDaoJDBC = new UserDaoJDBCImpl();
-        UserDaoHibernateImpl userDaoHibernate = new UserDaoHibernateImpl();
-        userDaoHibernate.createUsersTable();
-//        System.out.println("Created table in given database...");
-//
-        userDaoHibernate.saveUser("Yaroslav", "Mimeev", (byte) 22);
-        userDaoHibernate.saveUser("Yaroslav", "Mimeev", (byte) 22);
-        userDaoHibernate.saveUser("Ivan", "Ivanov", (byte) 39);
-        userDaoHibernate.saveUser("Arthas", "Menethil", (byte) 24);
-        userDaoHibernate.saveUser("Vladimir", "Putin", (byte) 69);
+        UserServiceImpl userService = new UserServiceImpl();
+        userService.createUsersTable();
+        System.out.println("Created table in given database...");
 
+        userService.saveUser("Yaroslav", "Mimeev", (byte) 22);
+        userService.saveUser("Ivan", "Ivanov", (byte) 39);
+        userService.saveUser("Arthas", "Menethil", (byte) 24);
+        userService.saveUser("Vladimir", "Putin", (byte) 69);
 
-        System.out.println(userDaoHibernate.getAllUsers());
-        userDaoHibernate.cleanUsersTable();
-        userDaoHibernate.dropUsersTable();
+        System.out.println(userService.getAllUsers());
+        userService.cleanUsersTable();
+        userService.dropUsersTable();
     }
 }
