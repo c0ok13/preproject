@@ -98,7 +98,7 @@ public class UserDaoJDBCImpl implements UserDao {
         Connection connection = Util.getConnection();
         try {
             Statement stmt = connection.createStatement();
-            stmt.execute("TRUNCATE TABLE IF EXISTS USER");
+            stmt.execute("TRUNCATE USER");
         }   catch (SQLException e) {
             e.printStackTrace();
         }
