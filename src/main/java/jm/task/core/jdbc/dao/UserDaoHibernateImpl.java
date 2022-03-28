@@ -1,15 +1,10 @@
 package jm.task.core.jdbc.dao;
 
-import com.fasterxml.classmate.AnnotationConfiguration;
-import com.fasterxml.classmate.AnnotationInclusion;
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.tool.hbm2ddl.SchemaExport;
 
-import java.lang.annotation.Annotation;
 import java.util.List;
 
 public class UserDaoHibernateImpl implements UserDao {
@@ -60,17 +55,10 @@ public class UserDaoHibernateImpl implements UserDao {
     public void saveUser(String name, String lastName, byte age) {
 
         Transaction transaction = null;
-
-        // auto close session object
         try (Session session = Util.getSessionFactory().openSession()) {
-
-            // start the transaction
             transaction = session.beginTransaction();
-
             User user = new User(name, lastName, age);
-            // save user object
             session.save(user);
-            // commit transction
             transaction.commit();
             session.close();
         } catch (Exception e) {
@@ -100,7 +88,9 @@ public class UserDaoHibernateImpl implements UserDao {
             session.close();
             return list;
         } catch (Exception e) {
-            e.printStackTrace();
+            if (transaction != null) {
+                transaction.rollback();
+            }
         }
         return null;
     }
@@ -108,14 +98,15 @@ public class UserDaoHibernateImpl implements UserDao {
     @Override
     public void cleanUsersTable() {
         Transaction transaction = null;
-        // auto close session object
         try (Session session = Util.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
             session.createSQLQuery("truncate table " + User.class.getSimpleName()).executeUpdate();
             transaction.commit();
             session.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            if (transaction != null) {
+                transaction.rollback();
+            }
         }
     }
 }

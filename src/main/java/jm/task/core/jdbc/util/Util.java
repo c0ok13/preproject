@@ -2,9 +2,7 @@ package jm.task.core.jdbc.util;
 
 import org.hibernate.SessionFactory;
 import jm.task.core.jdbc.model.User;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Environment;
-import org.hibernate.service.ServiceRegistry;
 
 import org.hibernate.cfg.Configuration;
 import java.sql.Connection;
@@ -35,8 +33,6 @@ public class Util {
     public static SessionFactory getSessionFactory() {
         if (sessionFactory == null) {
             try {
-
-                // Hibernate settings equivalent to hibernate.cfg.xml's properties
                 Properties settings = new Properties();
                 settings.put(Environment.DRIVER, "com.mysql.cj.jdbc.Driver");
                 settings.put(Environment.URL, "jdbc:mysql://localhost:3306/preproject?useSSL=false");
