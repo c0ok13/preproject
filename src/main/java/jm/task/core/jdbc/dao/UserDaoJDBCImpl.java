@@ -14,9 +14,8 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void createUsersTable() {
         Connection connection = Util.getConnection();
-        Statement stmt = null;
         try {
-            stmt = connection.createStatement();
+            Statement stmt = connection.createStatement();
             stmt.executeUpdate("""
                 create table IF NOT EXISTS user
                 (id       int NOT NULL AUTO_INCREMENT PRIMARY KEY ,
@@ -45,10 +44,8 @@ public class UserDaoJDBCImpl implements UserDao {
 
         Connection connection = Util.getConnection();
 
-        String insertStatement =
-                "INSERT INTO user (name, lastName, age) VALUES (?, ?, ?)";
         try {
-            PreparedStatement insertUser = connection.prepareStatement(insertStatement);
+            PreparedStatement insertUser = connection.prepareStatement( "INSERT INTO user (name, lastName, age) VALUES (?, ?, ?)");
             insertUser.setString(1, name);
             insertUser.setString(2, lastName);
             insertUser.setByte(3, age);
@@ -62,10 +59,8 @@ public class UserDaoJDBCImpl implements UserDao {
     public void removeUserById(long id) {
         Connection connection = Util.getConnection();
 
-        String insertStatement =
-                "DELETE FROM user WHERE ID = ?";
         try {
-            PreparedStatement deleteUser = connection.prepareStatement(insertStatement);
+            PreparedStatement deleteUser = connection.prepareStatement("DELETE FROM user WHERE ID = ?");
             deleteUser.setLong(1, id);
             deleteUser.executeUpdate();
         } catch (SQLException e) {
@@ -78,7 +73,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
         try (Connection connection = Util.getConnection();
              Statement statement = connection.createStatement();
-             ResultSet rst = statement.executeQuery("SELECT * FROM USER");
+             ResultSet rst = statement.executeQuery("SELECT * FROM USER")
         ){
             while (rst.next()) {
                 User user = new User();
@@ -98,7 +93,7 @@ public class UserDaoJDBCImpl implements UserDao {
         Connection connection = Util.getConnection();
         try {
             Statement stmt = connection.createStatement();
-            stmt.execute("TRUNCATE USER");
+            stmt.execute("TRUNCATE TABLE IF EXISTS USER");
         }   catch (SQLException e) {
             e.printStackTrace();
         }
