@@ -1,7 +1,12 @@
 package jm.task.core.jdbc;
 
+import jm.task.core.jdbc.service.UserService;
 import jm.task.core.jdbc.service.UserServiceImpl;
-import java.sql.*;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class Main {
 
@@ -10,10 +15,8 @@ public class Main {
     static final String PASS = "root";
 
     public static void main(String[] args)
-    {try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-         Statement stmt = conn.createStatement()
-    ) {
-        UserServiceImpl userService = new UserServiceImpl();
+    {
+        UserService userService = new UserServiceImpl();
         userService.createUsersTable();
         System.out.println("Created table in given database...");
 
@@ -25,8 +28,6 @@ public class Main {
         System.out.println(userService.getAllUsers());
         userService.cleanUsersTable();
         userService.dropUsersTable();
-    } catch (SQLException e) {
-        e.printStackTrace();
-    }
+
     }
 }
