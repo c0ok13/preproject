@@ -82,8 +82,9 @@ public class UserDaoJDBCImpl implements UserDao {
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
 
-        try (Statement stmt = connection.createStatement()) {
-            ResultSet rst = stmt.executeQuery("SELECT * FROM user");
+        try (Statement stmt = connection.createStatement();
+             ResultSet rst = stmt.executeQuery("SELECT * FROM user");
+        ) {
             while (rst.next()) {
                 User user = new User();
                 user.setId(rst.getLong(1));
@@ -92,7 +93,7 @@ public class UserDaoJDBCImpl implements UserDao {
                 user.setAge(rst.getByte(4));
                 users.add(user);
             }
-            rst.close();
+            connection.commit();
         } catch (SQLException e) {
             try {
                 connection.rollback();
@@ -105,7 +106,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void cleanUsersTable() {
         try (Statement stmt = connection.createStatement()) {
-            stmt.executeUpdate("TRUNCATE TABLE IF EXISTS user");
+            stmt.executeUpdate("TRUNCATE TABLE user");
             connection.commit();
         } catch (SQLException e) {
             try {
