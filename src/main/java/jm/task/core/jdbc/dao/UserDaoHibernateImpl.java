@@ -41,7 +41,7 @@ public class UserDaoHibernateImpl implements UserDao {
         // auto close session object
         try (Session session = Util.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            session.createSQLQuery("drop table " + User.class.getSimpleName()).executeUpdate();
+            session.createSQLQuery("DROP TABLE IF EXISTS " + User.class.getSimpleName()).executeUpdate();
             transaction.commit();
             session.close();
         } catch (Exception e) {
@@ -83,7 +83,7 @@ public class UserDaoHibernateImpl implements UserDao {
         // auto close session object
         try (Session session = Util.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            List <User> list = session.createCriteria(User.class).list();
+            List <User> list = session.createQuery("from User", User.class).getResultList();
             transaction.commit();
             session.close();
             return list;
@@ -100,7 +100,7 @@ public class UserDaoHibernateImpl implements UserDao {
         Transaction transaction = null;
         try (Session session = Util.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            session.createSQLQuery("truncate table " + User.class.getSimpleName()).executeUpdate();
+            session.createSQLQuery("TRUNCATE TABLE " + User.class.getSimpleName()).executeUpdate();
             transaction.commit();
             session.close();
         } catch (Exception e) {
